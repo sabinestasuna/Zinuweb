@@ -95,15 +95,4 @@ class Articles_model extends CI_Model
         }
     }
 
-    public function get_article_comments($article_id)
-    {
-        $this->db->select("comments.*, users.name as author_name");
-        $this->db->from("comments");
-        $this->db->join("users", "users.id = comments.user_id");
-        $this->db->where("comments.article_id", $article_id);
-        $this->db->order_by("comments.date_posted", "ASC");
-        $query = $this->db->get();
-
-        return $query->result_array();
-    }
 }

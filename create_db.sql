@@ -1,6 +1,15 @@
 CREATE DATABASE simple_news;
 USE simple_news;
 
+CREATE TABLE `ci_sessions` (
+  `id` varchar(128) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int(10) unsigned NOT NULL DEFAULT '0',
+  `data` blob NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ci_sessions_timestamp` (`timestamp`)
+);
+
 CREATE TABLE `users` (
   `user_id` integer PRIMARY KEY AUTO_INCREMENT,
   `email` varchar(255) UNIQUE,
@@ -19,7 +28,8 @@ CREATE TABLE `articles` (
   `author_id` integer,
   `publish_date` timestamp,
   `is_published` boolean DEFAULT true,
-  `category_id` integer
+  `category_id` integer,
+  `views` integer DEFAULT 0
 );
 
 CREATE TABLE `comments` (

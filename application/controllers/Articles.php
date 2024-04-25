@@ -9,21 +9,30 @@ class Articles extends MY_Controller {
         $this->load->model('comment_model');
     }
 
-    public function index() {
-        $this->data['title'] = 'Visi raksti';
-        $this->data['articles'] = $this->articles_model->get_articles();
-        $this->load->view('templates/header', $this->data);
-        $this->load->view('articles/index', $this->data);
-        $this->load->view('templates/footer');
-    }
-
-    public function view_by_author($author_id) {
-        $this->data['articles'] = $this->articles_model->get_articles_by_author($author_id);
-        $this->data['title'] = "Raksti no autora: " . $this->data['articles'][0]['author_name'];
+    public function index($id = null) {
+        $sort = $this->input->get('sort', TRUE) ?: 'newest';
+        $type = $this->uri->segment(1);
     
-        $this->load->view('templates/header', $this->data);
-        $this->load->view('articles/index', $this->data);
-        $this->load->view('templates/footer');
+        if ($type === 'category' && $id) {
+            $this->data['articles'] = $this->articles_model->get_articles_by_category($id, $sort);
+            $this->data['title'] = $this->articles_model->get_category_name($id);
+        } elseif ($type === 'author' && $id) {
+            $this->data['articles'] = $this->articles_model->get_articles_by_author($id, $sort);
+            $this->data['title'] = "Raksti no autora: " . $this->data['articles'][0]['author_name'];
+        } else {
+            $this->data['articles'] = $this->articles_model->get_articles($sort);
+            $this->data['title'] = 'Visi raksti';
+        }
+    
+        $this->data['sort'] = $sort;
+    
+        if ($this->input->is_ajax_request()) {
+            $this->load->view('articles/partial_articles', $this->data);
+        } else {
+            $this->load->view('templates/header', $this->data);
+            $this->load->view('articles/index', $this->data);
+            $this->load->view('templates/footer');
+        }
     }
 
     public function view($id) {
@@ -32,6 +41,8 @@ class Articles extends MY_Controller {
             $this->session->set_flashdata('access_denied', 'Lūdzu, pieslēdzieties, lai skatītu šo lapu.');
             redirect('login');
         }
+
+        $this->articles_model->increment_views($id);
         
         $article = $this->articles_model->get_article_by_id($id);
         if (empty($article)) {

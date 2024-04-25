@@ -59,3 +59,7 @@ $route['comment/create'] = 'comment/create';
 $route['default_controller'] = 'articles';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['articles'] = 'articles/index';
+$route['category/(:num)'] = 'articles/index/$1';
+$route['author/(:num)'] = 'articles/index/$1';

@@ -33,7 +33,7 @@
    <?php foreach ($comments as $comment): ?>
    <div class="bg-gray-100 rounded mb-2 comment">
       <p class="text-gray-800"><?php echo $comment['content']; ?></p>
-      <p class="text-sm text-gray-600">Autors: <?php echo $comment['author_name']; ?>, Publicēts: <?php echo date('Y-m-d', strtotime($comment['date_posted'])); ?></p>
+      <p class="text-sm text-gray-600">Autors: <?php echo $comment['author_name']; ?>, Publicēts: <?php echo date('d.m.Y H:i', strtotime($comment['date_posted'])); ?></p>
    </div>
    <?php endforeach; ?>
    <?php if (empty($comments)): ?>

@@ -11,8 +11,8 @@
         .nav-links { flex: 2; display: flex; justify-content: space-between; }
         .auth-links { flex: 1; display: flex; justify-content: flex-end; align-items: center; }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.css" integrity="sha512-Woz+DqWYJ51bpVk5Fv0yES/edIMXjj3Ynda+KWTIkGoynAMHrqTcDUQltbipuiaD5ymEo9520lyoVOo9jCQOCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js" integrity="sha512-Ixzuzfxv1EqafeQlTCufWfaC6ful6WFqIz4G+dWvK0beHw0NVJwvCKSgafpy5gwNqKmgUfIBraVwkKI+Cz0SEQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -37,7 +37,27 @@
                         <a href="<?php echo site_url('login'); ?>" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Pieslēgties</a>
                         <a href="<?php echo site_url('register'); ?>" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Reģistrēties</a>
                     <?php else: ?>
-                     <span><?php echo $this->session->userdata('username'); ?> <a href="<?php echo site_url('logout'); ?>" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"><i class="fas fa-sign-out-alt"></i> Atslēgties</a></span>
+                        <span>
+                            <?php if ($this->session->userdata('is_admin')): ?>
+                                <i class="fa-solid fa-user-shield"></i>
+                            <?php endif; ?>
+                            <?php if ($this->session->userdata('has_google')): ?>
+                                <span class="text-red-500 py-2 rounded-md text-sm font-medium cursor-not-allowed">
+                                    <i class="fab fa-google"></i>
+                                </span>
+                            <?php else: ?>
+                                <a href="<?php echo site_url('link_google'); ?>" class="text-gray-500 hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium">
+                                    <i class="fab fa-google"></i>
+                                </a>
+                            <?php endif; ?>
+                            <?php echo $this->session->userdata('username'); ?>
+                            <a href="<?php echo site_url('add'); ?>" class="text-gray-700 hover:text-gray-900 px-1 py-2 rounded-md text-sm font-medium">
+                                <i class="fas fa-plus"></i> Raksts
+                            </a>
+                            <a href="<?php echo site_url('logout'); ?>" class="text-gray-700 hover:text-gray-900 px-1 py-2 rounded-md text-sm font-medium">
+                                <i class="fas fa-sign-out-alt"></i> Atslēgties
+                            </a>
+                        </span>
                     <?php endif; ?>
                 </div>
             </div>

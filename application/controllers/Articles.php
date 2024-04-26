@@ -7,6 +7,7 @@ class Articles extends MY_Controller {
         parent::__construct();
         $this->load->model('articles_model');
         $this->load->model('comment_model');
+        $this->load->library('form_validation');
     }
 
     public function index($id = null) {
@@ -35,6 +36,21 @@ class Articles extends MY_Controller {
         }
     }
 
+
+    public function delete($id) {
+        if ($this->session->userdata('is_admin')) {
+            $result = $this->articles_model->delete_article($id);
+            if ($result) {
+                $this->session->set_flashdata('message', 'Raksts veiksmīgi dzēsts.');
+            } else {
+                $this->session->set_flashdata('error', 'Kļūda dzēšanas procesā.');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Jums nav tiesību dzēst rakstus.');
+        }
+        redirect('articles');
+    }
+
     public function view($id) {
 
         if (!$this->session->userdata('logged_in')) {
@@ -58,5 +74,45 @@ class Articles extends MY_Controller {
         $this->load->view('templates/header', $this->data);
         $this->load->view('articles/single', $this->data);
         $this->load->view('templates/footer');
+    }
+
+    public function create() {
+        if (!$this->session->userdata('logged_in')) {
+            $this->session->set_flashdata('not_logged_in', 'Jums ir jāpieslēdzas, lai pievienotu rakstu.');
+            redirect('login');
+        }
+        
+        $this->load->model('category_model');
+        $this->form_validation->set_rules('title', 'Nosaukums', 'required|trim');
+        $this->form_validation->set_rules('content', 'Saturs', 'required');
+
+        $this->data['title'] = 'Pievienot rakstu';
+    
+        if ($this->form_validation->run() === FALSE) {
+            $data['categories'] = $this->category_model->get_categories();
+            $this->load->view('templates/header', $this->data);
+            $this->load->view('articles/create', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $article_data = array(
+                'title' => $this->input->post('title'),
+                'content' => $this->input->post('content'),
+                'author_id' => $this->session->userdata('user_id'),
+                'category_id' => $this->input->post('category_id'),
+                'publish_date' => date('Y-m-d H:i:s'),
+                'is_published' => true
+            );
+    
+            if ($article_id = $this->articles_model->add_article($article_data)) {
+                if (!empty($_FILES['images']['name'][0])) {
+                    $this->articles_model->upload_images($_FILES['images'], $article_id);
+                }
+                $this->session->set_flashdata('message', 'Raksts veiksmīgi pievienots!');
+                redirect('article/' . $article_id);
+            } else {
+                $this->session->set_flashdata('error', 'Raksta pievienošana neizdevās.');
+                redirect('add');
+            }
+        }
     }
 }

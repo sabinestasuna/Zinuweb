@@ -20,4 +20,10 @@ class Comment_model extends CI_Model {
         $this->db->order_by('date_posted', 'desc');
         return $this->db->get()->result_array();
     }
+
+    public function delete_comment($comment_id) {
+        $this->db->where('id', $comment_id);
+        $this->db->delete('comments');
+        return $this->db->affected_rows();
+    }
 }

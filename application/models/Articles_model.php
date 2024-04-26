@@ -87,6 +87,11 @@ class Articles_model extends CI_Model
         }
     }
 
+    public function delete_article($id) {
+        $this->db->where('id', $id);
+        return $this->db->update('articles', ['is_published' => 0]);
+    }
+
     public function get_category_name($category_id)
     {
         $this->db->select("name");
@@ -108,4 +113,47 @@ class Articles_model extends CI_Model
         $this->db->update('articles');
     }
 
+    public function add_article($article_data) {
+        $insert = $this->db->insert('articles', $article_data);
+        if ($insert) {
+            return $this->db->insert_id();
+        }
+        return false;
+    }
+    
+    public function upload_images($images, $article_id) {
+        $this->load->library('upload');
+    
+        $uploadData = [];
+        $count = count($images['name']);
+        for ($i = 0; $i < $count; $i++) {
+            if ($images['name'][$i] != '') {
+                $_FILES['file']['name'] = $images['name'][$i];
+                $_FILES['file']['type'] = $images['type'][$i];
+                $_FILES['file']['tmp_name'] = $images['tmp_name'][$i];
+                $_FILES['file']['error'] = $images['error'][$i];
+                $_FILES['file']['size'] = $images['size'][$i];
+    
+                $config['upload_path'] = './uploads/';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config['max_size'] = 5000;
+                $config['file_name'] = time() . '_' . $_FILES['file']['name'];
+    
+                $this->upload->initialize($config);
+    
+                if ($this->upload->do_upload('file')) {
+                    $fileData = $this->upload->data();
+                    $uploadData[] = [
+                        'article_id' => $article_id,
+                        'image_path' => $config['upload_path'] . $fileData['file_name'],
+                        'upload_date' => date("Y-m-d H:i:s")
+                    ];
+                }
+            }
+        }
+    
+        if (!empty($uploadData)) {
+            $this->db->insert_batch('images', $uploadData);
+        }
+    }
 }

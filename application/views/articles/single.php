@@ -31,10 +31,15 @@
    <?php echo form_close(); ?>
 
    <?php foreach ($comments as $comment): ?>
-   <div class="bg-gray-100 rounded mb-2 comment">
-      <p class="text-gray-800"><?php echo $comment['content']; ?></p>
-      <p class="text-sm text-gray-600">Autors: <?php echo $comment['author_name']; ?>, Publicēts: <?php echo date('d.m.Y H:i', strtotime($comment['date_posted'])); ?></p>
-   </div>
+      <div class="bg-gray-100 rounded mb-2 comment">
+         <p class="text-gray-800"><?php echo $comment['content']; ?></p>
+         <p class="text-sm text-gray-600">Autors: <?php echo $comment['author_name']; ?>, Publicēts: <?php echo date('d.m.Y H:i', strtotime($comment['date_posted'])); ?></p>
+         <?php if ($this->session->userdata('is_admin')): ?>
+            <a href="<?php echo site_url('comment/delete/' . $comment['id']); ?>" onclick="return confirm('Vai tiešām vēlaties izdzēst šo komentāru?');" class="text-red-500 hover:text-red-700">
+                  <i class="fas fa-trash-alt"></i> Dzēst
+            </a>
+         <?php endif; ?>
+      </div>
    <?php endforeach; ?>
    <?php if (empty($comments)): ?>
    <p class="text-gray-600">Pagaidām nav komentāru.</p>

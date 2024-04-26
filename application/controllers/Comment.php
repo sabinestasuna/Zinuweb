@@ -21,4 +21,19 @@ class Comment extends CI_Controller {
         $this->comment_model->add_comment($article_id, $user_id, $content);
         redirect('articles/view/' . $article_id);
     }
+
+    public function delete($comment_id) {
+        if (!$this->session->userdata('is_admin')) {
+            show_error('Jums nav tiesību dzēst šo komentāru.', 403);
+        }
+
+        $this->comment_model->delete_comment($comment_id);
+        $this->session->set_flashdata('comment_deleted', 'Komentārs veiksmīgi izdzēsts.');
+        $referrer = $this->input->server('HTTP_REFERER');
+        if ($referrer) {
+            redirect($referrer);
+        } else {
+            redirect('/');
+        }
+    }
 }

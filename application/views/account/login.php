@@ -17,6 +17,9 @@
             Pieslēgties
         </button>
         <?php echo form_close(); ?>
+        <a href="<?= $google_login_url ?>" class="mt-2 w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            <i class="fab fa-google mr-2 items-center"></i> Pieslēgties ar Google
+        </a>
         <a href="<?php echo site_url('register'); ?>" class="text-sm text-gray-600 hover:text-gray-900 text-center block mt-4">Vai vēl neesi reģistrējies?</a>
     </div>
 </div>

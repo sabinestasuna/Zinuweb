@@ -24,5 +24,10 @@
 
     <p><?php echo substr($article['content'], 0, 100) . '...'; ?></p>
     <a href="<?php echo base_url('article/' . $article['id']); ?>" class="text-blue-600 hover:underline">Lasīt tālāk</a>
+    <?php if ($this->session->userdata('is_admin')): ?>
+        <button onclick="deleteArticle(<?php echo $article['id']; ?>)" class="text-red-500 hover:text-red-700">
+            <i class="fas fa-trash-alt"></i> Dzēst
+        </button>
+    <?php endif; ?>
 </div>
 <?php endforeach; ?>

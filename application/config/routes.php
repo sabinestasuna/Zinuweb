@@ -56,6 +56,7 @@ $route['category/(:num)'] = 'category/view/$1';
 $route['article/(:num)'] = 'articles/view/$1';
 $route['author/(:num)'] = 'articles/view_by_author/$1';
 $route['comment/create'] = 'comment/create';
+$route['comment/delete/(:num)'] = 'comment/delete/$1';
 $route['default_controller'] = 'articles';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
@@ -63,3 +64,8 @@ $route['translate_uri_dashes'] = FALSE;
 $route['articles'] = 'articles/index';
 $route['category/(:num)'] = 'articles/index/$1';
 $route['author/(:num)'] = 'articles/index/$1';
+$route['add'] = 'articles/create';
+
+$route['login/google_callback'] = 'login/google_callback';
+$route['link_google'] = 'login/link_google';
+$route['login/google_link_callback'] = 'login/google_link_callback';

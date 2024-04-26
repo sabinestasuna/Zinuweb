@@ -15,6 +15,7 @@ Izmantotās valodas un tehnoloģijas
    * PHP 7.4.33
    * MySQL 8.2.0
    * Nginx 1.25.3
+* Google PHP API (social login)
 * Vanilla JS
 * jQuery 3.7.1
 * AJAX refreshi

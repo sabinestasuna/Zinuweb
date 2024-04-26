@@ -15,7 +15,7 @@ class Register extends MY_Controller {
     private function initGoogleClient() {
         $this->google_client = new Google_Client();
         $this->google_client->setClientId(getenv('GOOGLE_CLIENT_ID'));
-        $this->google_client->setClientId(getenv('GOOGLE_CLIENT_SECRET'));
+        $this->google_client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
         $this->google_client->setRedirectUri(base_url('login/google_callback'));
         $this->google_client->addScope("https://www.googleapis.com/auth/userinfo.email");
         $this->google_client->addScope(Google_Service_Oauth2::USERINFO_EMAIL);
